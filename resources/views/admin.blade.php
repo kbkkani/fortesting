@@ -114,11 +114,11 @@
                                 Course Forms</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('corporate.clients')}}"><i class="icon-puzzle"></i>Manage
+                            <a class="nav-link" href="{{route('corporateclient.index')}}"><i class="icon-puzzle"></i>Manage
                                 Corporate Clients</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('corporate.add')}}"><i class="icon-puzzle"></i>Add Corporate
+                            <a class="nav-link" href="{{route('corporate.store')}}"><i class="icon-puzzle"></i>Add Corporate
                                 Client</a>
                         </li>
                     </ul>

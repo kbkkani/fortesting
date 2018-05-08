@@ -27,7 +27,7 @@
 
 
         <div class="row">
-            <form action="{{route('corporate-client/'.isset($clients)?$clients->id:'')}}" method="POST" enctype="multipart/form-data">
+            <form action="{{route('Corporateclient.update/'.isset($clients)?$clients->id:'')}}" method="POST" enctype="multipart/form-data">
                 {{ csrf_field() }}
 
                 @if(isset($clients))

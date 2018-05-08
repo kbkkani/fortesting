@@ -50,7 +50,72 @@ class CorporateclientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'businessname' => 'required',
+            'contactno' => 'required',
+            'email' => 'required|email',
+            'logo_image' => 'image|max:1999',
+
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+
+
+        if($request->hasFile('logo_image')){
+
+            //$file = Input::file('logo_image');
+
+            //Get file name with extension
+            $fileNameWithExt = $request->file('logo_image')->getClientOriginalName();
+
+            //Get just file name
+            $filename = pathinfo($fileNameWithExt,PATHINFO_FILENAME);
+
+            //Get just extention
+            $extention = $request->file('logo_image')->getClientOriginalExtension();
+
+            //File name to store
+            $fileNameToStore = strtolower($filename.'_'.time().'.'.$extention);
+
+            //Upload image
+            //$path = $request->file('logo_image')->storeAs('public/logo',$fileNameToStore);
+            $request->file('logo_image')->move('logo' , $fileNameToStore);
+
+
+        }else{
+            $fileNameToStore = 'noimage.jpg';
+        }
+
+
+        $lastid = CoporateClient::create([
+            'business_name' => $request->input('businessname'),
+            'contact_no' => $request->input('contactno'),
+            'email' => $request->input('email'),
+            'pointof_fname_and_lastname' => $request->input('fnameandlname'),
+            'pointof_email' => $request->input('pemail'),
+            'prefix_code' => $request->input('prefixcode'),
+            'isage' => $request->input('isage'),
+            'agreement_text' => $request->input('agreement'),
+            'logo' => $fileNameToStore,
+            'header_color' => $request->input('headercolor'),
+            'footer_color' => $request->input('footercolor'),
+        ]);
+
+
+        $alldomains = $request->input('subdomains');
+        $domains = explode(',', $alldomains[0]);
+        foreach ($domains as $domain) {
+
+            SubDomain::create([
+                'client_id' => $lastid,
+                'domain_url' => $domain
+            ]);
+
+        }
+
+        return redirect()->route('corporate.clients');
     }
 
     /**
@@ -183,72 +248,7 @@ class CorporateclientController extends Controller
     public function createCorporateClient(Request $request)
     {
 
-        $validator = Validator::make($request->all(), [
-            'businessname' => 'required',
-            'contactno' => 'required',
-            'email' => 'required|email',
-            'logo_image' => 'image|max:1999',
 
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator);
-        }
-
-
-        if($request->hasFile('logo_image')){
-
-            //$file = Input::file('logo_image');
-
-            //Get file name with extension
-            $fileNameWithExt = $request->file('logo_image')->getClientOriginalName();
-
-            //Get just file name
-            $filename = pathinfo($fileNameWithExt,PATHINFO_FILENAME);
-
-            //Get just extention
-            $extention = $request->file('logo_image')->getClientOriginalExtension();
-
-            //File name to store
-            $fileNameToStore = strtolower($filename.'_'.time().'.'.$extention);
-
-            //Upload image
-            //$path = $request->file('logo_image')->storeAs('public/logo',$fileNameToStore);
-            $request->file('logo_image')->move('logo' , $fileNameToStore);
-
-
-        }else{
-            $fileNameToStore = 'noimage.jpg';
-        }
-
-
-        $lastid = CoporateClient::create([
-            'business_name' => $request->input('businessname'),
-            'contact_no' => $request->input('contactno'),
-            'email' => $request->input('email'),
-            'pointof_fname_and_lastname' => $request->input('fnameandlname'),
-            'pointof_email' => $request->input('pemail'),
-            'prefix_code' => $request->input('prefixcode'),
-            'isage' => $request->input('isage'),
-            'agreement_text' => $request->input('agreement'),
-            'logo' => $fileNameToStore,
-            'header_color' => $request->input('headercolor'),
-            'footer_color' => $request->input('footercolor'),
-        ]);
-
-
-        $alldomains = $request->input('subdomains');
-        $domains = explode(',', $alldomains[0]);
-        foreach ($domains as $domain) {
-
-            SubDomain::create([
-                'client_id' => $lastid,
-                'domain_url' => $domain
-            ]);
-
-        }
-
-        return redirect()->route('corporate.clients');
 
     }
 
@@ -256,8 +256,8 @@ class CorporateclientController extends Controller
     {
         $clients = CoporateClient::all();
         return Datatables::of($clients)->addColumn('actions', function ($data) {
-            return '<a href="' . url('admin/corporate-client/' . $data->id . '/edit') . '" class="btn btn-primary btn-sm">Edit</a>
-                    <a href="' . url('admin/corporate-client/' . $data->id) . '" class="btn btn-danger btn-sm">Delete</a>';
+            return '<a href="' . url('admin/Corporateclient/' . $data->id . '/edit') . '" class="btn btn-primary btn-sm">Edit</a>
+                    <a href="' . url('admin/Corporateclient/' . $data->id) . '" class="btn btn-danger btn-sm">Delete</a>';
         })->make(true);
     }
 
