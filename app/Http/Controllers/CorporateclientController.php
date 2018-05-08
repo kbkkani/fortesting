@@ -25,11 +25,8 @@ class CorporateclientController extends Controller
 
     public function index()
     {
-        $corporateClients = \App\CoporateClient::all();
-        //return view('includes.view-corporate-client',array("cclients" => $corporateClients));
         $user = \Auth::user();
-        //  dd($user);
-        return view('clients.view-corporate-client')->with(['user' => $user, 'clients' => $corporateClients]);
+        return view('clients.view-corporate-client')->with(['user' => $user]);
     }
 
     /**
@@ -39,7 +36,8 @@ class CorporateclientController extends Controller
      */
     public function create()
     {
-        //
+        $user = \Auth::user();
+        return view('clients.addnew')->with(['user' => $user]);
     }
 
     /**
@@ -139,7 +137,6 @@ class CorporateclientController extends Controller
     {
         $user = \Auth::user();
         $clients = CoporateClient::find($id);
-        //dd($clients);
 
         return view('clients.edit')->with(['user' => $user,'clients'=>$clients]);
     }
@@ -241,8 +238,7 @@ class CorporateclientController extends Controller
 
     public function addNewCorporateClient()
     {
-        $user = \Auth::user();
-        return view('clients.addnew')->with(['user' => $user]);
+
     }
 
     public function createCorporateClient(Request $request)
@@ -256,8 +252,8 @@ class CorporateclientController extends Controller
     {
         $clients = CoporateClient::all();
         return Datatables::of($clients)->addColumn('actions', function ($data) {
-            return '<a href="' . url('admin/Corporateclient/' . $data->id . '/edit') . '" class="btn btn-primary btn-sm">Edit</a>
-                    <a href="' . url('admin/Corporateclient/' . $data->id) . '" class="btn btn-danger btn-sm">Delete</a>';
+            return '<a href="' . url('corporateclient/' . $data->id . '/edit') . '" class="btn btn-primary btn-sm">Edit</a>
+                    <a href="' . url('corporateclient/' . $data->id) . '" class="btn btn-danger btn-sm">Delete</a>';
         })->make(true);
     }
 

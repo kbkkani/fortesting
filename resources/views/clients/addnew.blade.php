@@ -29,7 +29,7 @@
 
 
             <div class="row">
-                <form action="{{route('ccnew')}}" method="POST" enctype="multipart/form-data">
+                <form action="{{route('corporateclient.store')}}" method="POST" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <div class="col-sm-6">
                         <div class="form-group">

@@ -13,7 +13,7 @@
 
     <!-- Icons -->
     <link href="{{asset('css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
-    <link href="{{asset('css/fontawesome-all.css')}}" rel="stylesheet" type="text/css">
+    {{--<link href="{{asset('css/fontawesome-all.css')}}" rel="stylesheet" type="text/css">--}}
     <link href="{{asset('css/simple-line-icons.min.css')}}" rel="stylesheet" type="text/css">
 
     <!-- Tag inputs-->
@@ -118,7 +118,7 @@
                                 Corporate Clients</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('corporate.store')}}"><i class="icon-puzzle"></i>Add Corporate
+                            <a class="nav-link" href="{{route('corporateclient.create')}}"><i class="icon-puzzle"></i>Add Corporate
                                 Client</a>
                         </li>
                     </ul>
