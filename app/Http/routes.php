@@ -175,6 +175,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('admin.createCorporateClient', 'CorporateclientController@getUsers')->name('datatable.clients');
 
     Route::get('admin/corporate-client/{id}', 'CorporateclientController@delete');
+    Route::post('admin.updateCorporateClient', 'CorporateclientController@update')->name('corporate.update');
     Route::resource('admin/corporate-client', 'CorporateclientController');
 });
 

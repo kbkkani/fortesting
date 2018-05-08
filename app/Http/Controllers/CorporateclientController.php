@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Storage;
 use App\CoporateClient;
 use App\SubDomain;
 use Dompdf\Exception;
@@ -83,7 +84,69 @@ class CorporateclientController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+
+        dd($request);
+
+        $clients = CoporateClient::findOrFail($id);
+
+
+        $validator = Validator::make($request->all(), [
+            'businessname' => 'required',
+            'contactno' => 'required',
+            'email' => 'required|email',
+            'logo_image' => 'image|max:1999',
+
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator);
+        }
+
+
+        if($request->hasFile('logo_image')){
+
+            //$file = Input::file('logo_image');
+
+            //Get file name with extension
+            $fileNameWithExt = $request->file('logo_image')->getClientOriginalName();
+
+            //Get just file name
+            $filename = pathinfo($fileNameWithExt,PATHINFO_FILENAME);
+
+            //Get just extention
+            $extention = $request->file('logo_image')->getClientOriginalExtension();
+
+            //File name to store
+            $fileNameToStore = strtolower($filename.'_'.time().'.'.$extention);
+
+            //Upload image
+            //$path = $request->file('logo_image')->storeAs('public/logo',$fileNameToStore);
+            $request->file('logo_image')->move('logo' , $fileNameToStore);
+
+
+        }else{
+            $fileNameToStore = 'noimage.jpg';
+        }
+
+
+        $input = $request->all();
+
+        $clients->fill($input)->save();
+
+
+//        $alldomains = $request->input('subdomains');
+//        $domains = explode(',', $alldomains[0]);
+//        foreach ($domains as $domain) {
+//
+//            SubDomain::create([
+//                'client_id' => $lastid,
+//                'domain_url' => $domain
+//            ]);
+//
+//        }
+
+        return redirect()->route('corporate.clients');
     }
 
     /**
@@ -124,10 +187,38 @@ class CorporateclientController extends Controller
             'businessname' => 'required',
             'contactno' => 'required',
             'email' => 'required|email',
+            'logo_image' => 'image|max:1999',
+
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator);
+        }
+
+
+        if($request->hasFile('logo_image')){
+
+            //$file = Input::file('logo_image');
+
+            //Get file name with extension
+            $fileNameWithExt = $request->file('logo_image')->getClientOriginalName();
+
+            //Get just file name
+            $filename = pathinfo($fileNameWithExt,PATHINFO_FILENAME);
+
+            //Get just extention
+            $extention = $request->file('logo_image')->getClientOriginalExtension();
+
+            //File name to store
+            $fileNameToStore = strtolower($filename.'_'.time().'.'.$extention);
+
+            //Upload image
+            //$path = $request->file('logo_image')->storeAs('public/logo',$fileNameToStore);
+            $request->file('logo_image')->move('logo' , $fileNameToStore);
+
+
+        }else{
+            $fileNameToStore = 'noimage.jpg';
         }
 
 
@@ -140,10 +231,9 @@ class CorporateclientController extends Controller
             'prefix_code' => $request->input('prefixcode'),
             'isage' => $request->input('isage'),
             'agreement_text' => $request->input('agreement'),
-            'logo' => $request->input('logo'),
+            'logo' => $fileNameToStore,
             'header_color' => $request->input('headercolor'),
             'footer_color' => $request->input('footercolor'),
-
         ]);
 
 

@@ -2,6 +2,8 @@
 @section('content')
 
 
+
+
     <div class="panel-heading">
         <div class="row">
             <h4>Add Corporate Client</h4>
@@ -79,10 +81,18 @@
                             <textarea name="agreement" class="form-control" placeholder="Agreement Text"></textarea>
                         </div>
 
-                        <div class="form-group">
-                            <label for="">Logo</label>
-                            <input type="file" name="logos" id="exampleInputFile">
-                            <p class="help-block">250 x 250 px.</p>
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <label for="">Logo</label>
+                                    <input type="file" name="logo_image" id="logoInput">
+                                    <p class="help-block">250 x 250 px.</p>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <img id="logo" src="noimage" alt="logo image"  width="100%"/>
+                            </div>
                         </div>
 
                         <input type="hidden" name="logo" id="exampleInputFile" value="asas">

@@ -205,6 +205,30 @@
 
     });
 
+</script><script>
+    $(function() {
+        var src = $('#logo').attr('src');
+        if(src == 'noimage'){
+            $('#logo').hide();
+        }
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    console.log(e.target.result);
+                    $('#logo').attr('src', e.target.result);
+                    $('#logo').fadeIn(400);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#logoInput").change(function() {
+
+            readURL(this);
+        });
+    });
 </script>
 </body>
 </html>

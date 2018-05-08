@@ -27,7 +27,7 @@
 
 
         <div class="row">
-            <form action="{{route('ccnew')}}" method="POST" enctype="multipart/form-data">
+            <form action="{{route('corporate-client/'.isset($clients)?$clients->id:'')}}" method="PUT" enctype="multipart/form-data">
                 {{ csrf_field() }}
                 <div class="col-sm-6">
                     <div class="form-group">
@@ -79,13 +79,20 @@
                         <textarea name="agreement" class="form-control" placeholder="Agreement Text" value="{{$clients['agreement_text']}}"></textarea>
                     </div>
 
-                    <div class="form-group">
-                        <label for="">Logo</label>
-                        <input type="file" name="logos" id="exampleInputFile">
-                        <p class="help-block">250 x 250 px.</p>
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="form-group">
+                                <label for="">Logo</label>
+                                <input type="file" name="logo_image" id="logoInput">
+                                <p class="help-block">250 x 250 px.</p>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <img id="logo" src="/logo/{{$clients['logo']}}" alt="logo image"  width="100%"/>
+                        </div>
                     </div>
 
-                    <input type="hidden" name="logo" id="exampleInputFile" value="asas">
 
                     <div class="form-group">
                         <label for="">Header Color</label>
