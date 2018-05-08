@@ -27,8 +27,13 @@
 
 
         <div class="row">
-            <form action="{{route('corporate-client/'.isset($clients)?$clients->id:'')}}" method="PUT" enctype="multipart/form-data">
+            <form action="{{route('corporate-client/'.isset($clients)?$clients->id:'')}}" method="POST" enctype="multipart/form-data">
                 {{ csrf_field() }}
+
+                @if(isset($clients))
+                    {{method_field('PUT')}}
+                @endif
+
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="">Business Name</label>

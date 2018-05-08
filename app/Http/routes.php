@@ -167,15 +167,15 @@ Route::group(['middleware' => 'auth'], function () {
         return view('includes.view_group', array("groups" => $groups, "groupcourses" => $groupcourses, "user" => $user));
     });
 
-    Route::get('admin/allCorporateClients', 'CorporateclientController@allCorporateClients')->name('corporate.clients');
-    Route::get('admin/addNewCorporateClient', 'CorporateclientController@addNewCorporateClient')->name('corporate.add');
-
-    Route::post('admin/createCorporateClient', 'CorporateclientController@createCorporateClient')->name('ccnew');
-
-    Route::post('admin.createCorporateClient', 'CorporateclientController@getUsers')->name('datatable.clients');
-
+//    Route::get('admin/allCorporateClients', 'CorporateclientController@allCorporateClients')->name('corporate.clients');
+//    Route::get('admin/addNewCorporateClient', 'CorporateclientController@addNewCorporateClient')->name('corporate.add');
+//
+//    Route::post('admin/createCorporateClient', 'CorporateclientController@createCorporateClient')->name('ccnew');
+//
+//    Route::post('admin.createCorporateClient', 'CorporateclientController@getUsers')->name('datatable.clients');
+//
     Route::get('admin/corporate-client/{id}', 'CorporateclientController@delete');
-    Route::post('admin.updateCorporateClient', 'CorporateclientController@update')->name('corporate.update');
+//    Route::post('admin.updateCorporateClient', 'CorporateclientController@update')->name('corporate.update');
     Route::resource('admin/corporate-client', 'CorporateclientController');
 });
 

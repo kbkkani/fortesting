@@ -25,7 +25,11 @@ class CorporateclientController extends Controller
 
     public function index()
     {
-        //
+        $corporateClients = \App\CoporateClient::all();
+        //return view('includes.view-corporate-client',array("cclients" => $corporateClients));
+        $user = \Auth::user();
+        //  dd($user);
+        return view('clients.view-corporate-client')->with(['user' => $user, 'clients' => $corporateClients]);
     }
 
     /**
@@ -166,11 +170,7 @@ class CorporateclientController extends Controller
 
     public function allCorporateClients()
     {
-        $corporateClients = \App\CoporateClient::all();
-        //return view('includes.view-corporate-client',array("cclients" => $corporateClients));
-        $user = \Auth::user();
-        //  dd($user);
-        return view('clients.view-corporate-client')->with(['user' => $user, 'clients' => $corporateClients]);
+
     }
 
 
