@@ -22,12 +22,14 @@
 
 
 
+
+
 <div class="panel panel-default">
     <div class="panel-body">
 
 
         <div class="row">
-            <form action="{{route('corporateclient.update/'.isset($clients)?$clients->id:'')}}" method="POST" enctype="multipart/form-data">
+            <form action="{{route('corporateclient.update',$clients->id)}}" method="POST" enctype="multipart/form-data">
                 {{ csrf_field() }}
 
                 @if(isset($clients))
@@ -60,11 +62,20 @@
                         <input type="email" name="pemail" class="form-control" id="" placeholder="Point of contact Email Address"  value="{{$clients['pointof_email']}}">
                     </div>
 
+                    <?php
+                    $domains = "";
+                    foreach($clients->subDomains as $x){
+                        $domains .=$x->domain_url.',';
+                    }
+                    ?>
                     <div class="form-group">
                         <label for="">Subdomains</label>
-                        <input type="test" name="subdomains[]" class="form-control" id="tags_1" placeholder=""  value="">
+                        <input type="test" name="subdomains[]" class="form-control" id="tags_1" placeholder=""  value="{{rtrim($domains,",")}}">
                     </div>
                 </div>
+
+
+
 
 
                 <div class="col-sm-6">
@@ -92,6 +103,8 @@
                                 <p class="help-block">250 x 250 px.</p>
                             </div>
                         </div>
+
+                        <input type="hidden" name="old_logo" value="{{$clients['logo']}}">
 
                         <div class="col-sm-4">
                             <img id="logo" src="/logo/{{$clients['logo']}}" alt="logo image"  width="100%"/>

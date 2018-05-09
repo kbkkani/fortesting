@@ -26,4 +26,9 @@ class CoporateClient extends Model
             'client_id', 'course_id');
     }
 
+
+    public function subDomains(){
+        return $this->hasMany('App\SubDomain','client_id');
+    }
+
 }

@@ -138,6 +138,7 @@ class CorporateclientController extends Controller
         $user = \Auth::user();
         $clients = CoporateClient::find($id);
 
+
         return view('clients.edit')->with(['user' => $user,'clients'=>$clients]);
     }
 
@@ -151,68 +152,103 @@ class CorporateclientController extends Controller
     public function update(Request $request, $id)
     {
 
-
-        dd($request);
-
         $clients = CoporateClient::findOrFail($id);
-
-
         $validator = Validator::make($request->all(), [
             'businessname' => 'required',
             'contactno' => 'required',
             'email' => 'required|email',
             'logo_image' => 'image|max:1999',
-
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator);
         }
 
+        if(\File::exists(public_path('logo/'.$clients->logo))){
 
-        if($request->hasFile('logo_image')){
+            \File::delete(public_path('logo/'.$clients->logo));
+            if($request->hasFile('logo_image')){
 
-            //$file = Input::file('logo_image');
+                //$file = Input::file('logo_image');
 
-            //Get file name with extension
-            $fileNameWithExt = $request->file('logo_image')->getClientOriginalName();
+                //Get file name with extension
+                $fileNameWithExt = $request->file('logo_image')->getClientOriginalName();
 
-            //Get just file name
-            $filename = pathinfo($fileNameWithExt,PATHINFO_FILENAME);
+                //Get just file name
+                $filename = pathinfo($fileNameWithExt,PATHINFO_FILENAME);
 
-            //Get just extention
-            $extention = $request->file('logo_image')->getClientOriginalExtension();
+                //Get just extention
+                $extention = $request->file('logo_image')->getClientOriginalExtension();
 
-            //File name to store
-            $fileNameToStore = strtolower($filename.'_'.time().'.'.$extention);
+                //File name to store
+                $fileNameToStore = strtolower($filename.'_'.time().'.'.$extention);
 
-            //Upload image
-            //$path = $request->file('logo_image')->storeAs('public/logo',$fileNameToStore);
-            $request->file('logo_image')->move('logo' , $fileNameToStore);
-
-
+                //Upload image
+                //$path = $request->file('logo_image')->storeAs('public/logo',$fileNameToStore);
+                $request->file('logo_image')->move('logo' , $fileNameToStore);
+            }else{
+                $fileNameToStore = $request->input('old_logo');
+            }
         }else{
-            $fileNameToStore = 'noimage.jpg';
+
+            if($request->hasFile('logo_image')){
+                //$file = Input::file('logo_image');
+                //Get file name with extension
+                $fileNameWithExt = $request->file('logo_image')->getClientOriginalName();
+
+                //Get just file name
+                $filename = pathinfo($fileNameWithExt,PATHINFO_FILENAME);
+
+                //Get just extention
+                $extention = $request->file('logo_image')->getClientOriginalExtension();
+
+                //File name to store
+                $fileNameToStore = strtolower($filename.'_'.time().'.'.$extention);
+
+                //Upload image
+                //$path = $request->file('logo_image')->storeAs('public/logo',$fileNameToStore);
+                $request->file('logo_image')->move('logo' , $fileNameToStore);
+            }else{
+                $fileNameToStore = $request->input('old_logo');
+            }
         }
 
+        $client= CoporateClient::find($id);
 
-        $input = $request->all();
+        $client->business_name = $request->input('businessname');
+        $client->contact_no = $request->input('contactno');
+        $client->email = $request->input('email');
+        $client->pointof_fname_and_lastname = $request->input('fnameandlname');
+        $client->pointof_email = $request->input('pemail');
+        $client->prefix_code = $request->input('prefixcode');
+        $client->isage = $request->input('isage');
+        $client->agreement_text = $request->input('agreement');
+        $client->logo = $fileNameToStore;
+        $client->header_color = $request->input('headercolor');
+        $client->footer_color = $request->input('footercolor');
 
-        $clients->fill($input)->save();
+        $client->save();
+
+        //$c= CoporateClient::find($id)->subDomains;
+      //  dd($c);
+      //  $c->delete();
+
+//        $c = SubDomain::find(['client_id'=>$id]);
+//        dd($c);
 
 
-//        $alldomains = $request->input('subdomains');
-//        $domains = explode(',', $alldomains[0]);
-//        foreach ($domains as $domain) {
-//
-//            SubDomain::create([
-//                'client_id' => $lastid,
-//                'domain_url' => $domain
-//            ]);
-//
-//        }
+        $alldomains = $request->input('subdomains');
+        $domains = explode(',', $alldomains[0]);
+        foreach ($domains as $domain) {
 
-        return redirect()->route('corporate.clients');
+            SubDomain::create([
+                'client_id' => $id,
+                'domain_url' => $domain
+            ]);
+
+        }
+
+        return redirect()->route('corporateclient.index');
     }
 
     /**
