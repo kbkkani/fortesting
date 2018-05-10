@@ -1,6 +1,11 @@
 @extends('admin')
 @section('content')
 
+    <style>
+        .paginate_button{padding:0 !important}
+
+    </style>
+
     <div class="panel-heading">
         <div class="row">
             <h4>All coporate clients</h4>

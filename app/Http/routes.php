@@ -174,19 +174,14 @@ Route::group(['middleware' => 'auth'], function () {
 //
     Route::post('admin.createCorporateClient', 'CorporateclientController@getUsers')->name('datatable.clients');
 //
-   // Route::get('admin/corporate-client/{id}', 'CorporateclientController@delete');
+    Route::get('admin.corporate-client/{id}', 'CorporateclientController@delete');
 //    Route::post('admin.updateCorporateClient', 'CorporateclientController@update')->name('corporate.update');
     Route::resource('corporateclient', 'CorporateclientController');
 });
 
 
 
-Route::get('clean', function (){
-    $exitCode = Artisan::call('cache:clear');
-    $exitCode = Artisan::call('config:clear');
-    $exitCode = Artisan::call('view:clear');
-    exec('composer dump-autoload');
-});
+
 
 
 

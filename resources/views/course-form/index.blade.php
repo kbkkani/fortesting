@@ -1,6 +1,9 @@
 @extends('admin')
 @section('content')
+    <style>
+        .form-control{height:25px !important;padding:2px 12px !important;float:right;border-radius: 4px;}
 
+    </style>
     <div class="panel-heading">
         <div class="row">
             <h4>Manage user types</h4>
@@ -13,8 +16,8 @@
             <th>Id</th>
             <th>Course Id</th>
             <th>Location</th>
-            <th>Type</th>
-            <th>User Form</th>
+            <th style="width:60px;">Type</th>
+            <th style="width:60px;">User Form</th>
         </tr>
         </thead>
     </table>

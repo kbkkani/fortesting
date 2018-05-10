@@ -164,53 +164,16 @@ class CorporateclientController extends Controller
             return redirect()->back()->withErrors($validator);
         }
 
-        if(\File::exists(public_path('logo/'.$clients->logo))){
+        if($request->hasFile('logo_image')) {
 
-            \File::delete(public_path('logo/'.$clients->logo));
-            if($request->hasFile('logo_image')){
-
-                //$file = Input::file('logo_image');
-
-                //Get file name with extension
-                $fileNameWithExt = $request->file('logo_image')->getClientOriginalName();
-
-                //Get just file name
-                $filename = pathinfo($fileNameWithExt,PATHINFO_FILENAME);
-
-                //Get just extention
-                $extention = $request->file('logo_image')->getClientOriginalExtension();
-
-                //File name to store
-                $fileNameToStore = strtolower($filename.'_'.time().'.'.$extention);
-
-                //Upload image
-                //$path = $request->file('logo_image')->storeAs('public/logo',$fileNameToStore);
-                $request->file('logo_image')->move('logo' , $fileNameToStore);
-            }else{
-                $fileNameToStore = $request->input('old_logo');
+            if (\File::exists(public_path('logo/' . $clients->logo))) {
+                \File::delete(public_path('logo/' . $clients->logo));
+                $fileNameToStore = $this->doUpload($request);
+            } else {
+                $fileNameToStore = $this->doUpload($request);
             }
         }else{
-
-            if($request->hasFile('logo_image')){
-                //$file = Input::file('logo_image');
-                //Get file name with extension
-                $fileNameWithExt = $request->file('logo_image')->getClientOriginalName();
-
-                //Get just file name
-                $filename = pathinfo($fileNameWithExt,PATHINFO_FILENAME);
-
-                //Get just extention
-                $extention = $request->file('logo_image')->getClientOriginalExtension();
-
-                //File name to store
-                $fileNameToStore = strtolower($filename.'_'.time().'.'.$extention);
-
-                //Upload image
-                //$path = $request->file('logo_image')->storeAs('public/logo',$fileNameToStore);
-                $request->file('logo_image')->move('logo' , $fileNameToStore);
-            }else{
-                $fileNameToStore = $request->input('old_logo');
-            }
+            $fileNameToStore = $request->input('old_logo');
         }
 
         $client= CoporateClient::find($id);
@@ -229,13 +192,17 @@ class CorporateclientController extends Controller
 
         $client->save();
 
-        //$c= CoporateClient::find($id)->subDomains;
-      //  dd($c);
-      //  $c->delete();
+       CoporateClient::find($id)->subDomains()->delete();
 
-//        $c = SubDomain::find(['client_id'=>$id]);
+
+
+        //dd($c);
+       // $c->delete();
+
+    // $c = SubDomain::find(['client_id'=>$id]);
+        //$c->delete();
 //        dd($c);
-
+        //SubDomain::where('client_id', $id)->delete();
 
         $alldomains = $request->input('subdomains');
         $domains = explode(',', $alldomains[0]);
@@ -251,6 +218,38 @@ class CorporateclientController extends Controller
         return redirect()->route('corporateclient.index');
     }
 
+
+    public function doUpload($request){
+        if($request->hasFile('logo_image')){
+            //$file = Input::file('logo_image');
+            //Get file name with extension
+            $fileNameWithExt = $request->file('logo_image')->getClientOriginalName();
+
+            //Get just file name
+            $filename = pathinfo($fileNameWithExt,PATHINFO_FILENAME);
+
+            //Get just extention
+            $extention = $request->file('logo_image')->getClientOriginalExtension();
+
+            //File name to store
+            $fileNameToStore = strtolower($filename.'_'.time().'.'.$extention);
+
+            //Upload image
+            //$path = $request->file('logo_image')->storeAs('public/logo',$fileNameToStore);
+            $request->file('logo_image')->move('logo' , $fileNameToStore);
+        }else{
+            $fileNameToStore = $request->input('old_logo');
+        }
+
+        return $fileNameToStore;
+    }
+
+
+
+
+
+
+
     /**
      * Remove the specified resource from storage.
      *
@@ -261,35 +260,16 @@ class CorporateclientController extends Controller
     {
         $clients = CoporateClient::find($id);
         $clients->delete();
-
         return Redirect::to('clients');
     }
 
-
-    public function allCorporateClients()
-    {
-
-    }
-
-
-    public function addNewCorporateClient()
-    {
-
-    }
-
-    public function createCorporateClient(Request $request)
-    {
-
-
-
-    }
 
     public function getUsers()
     {
         $clients = CoporateClient::all();
         return Datatables::of($clients)->addColumn('actions', function ($data) {
             return '<a href="' . url('corporateclient/' . $data->id . '/edit') . '" class="btn btn-primary btn-sm">Edit</a>
-                    <a href="' . url('corporateclient/' . $data->id) . '" class="btn btn-danger btn-sm">Delete</a>';
+                    <a href="' . url('admin.corporate-client', $data->id) . '" class="btn btn-danger btn-sm">Delete</a>';
         })->make(true);
     }
 
@@ -297,8 +277,7 @@ class CorporateclientController extends Controller
     {
         $clients = CoporateClient::find($id);
         $clients->delete();
-
-        return redirect()->route('corporate.clients');
+        return redirect()->route('corporateclient.index');
     }
 
 }
